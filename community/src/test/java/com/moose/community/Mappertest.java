@@ -1,8 +1,10 @@
 package com.moose.community;
 
 import com.moose.community.dao.DiscussPostMapper;
+import com.moose.community.dao.LoginTicketMapper;
 import com.moose.community.dao.UserMapper;
 import com.moose.community.entity.DiscussPost;
+import com.moose.community.entity.LoginTicket;
 import com.moose.community.entity.User;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -24,6 +26,9 @@ public class Mappertest {
 
     @Autowired
     private DiscussPostMapper discussPostMapper;
+
+    @Autowired
+    private LoginTicketMapper loginTicketMapper;
 
     @Test
     public void testselect(){
@@ -69,6 +74,30 @@ public class Mappertest {
         }
         int row = discussPostMapper.selectDiscussPostRows(0);
         System.out.println(row);
+    }
+
+    @Test
+    public void testInsertLoginTicket(){
+        LoginTicket loginTicket = new LoginTicket();
+        loginTicket.setUserId(101);
+        loginTicket.setTicket("abc");
+        loginTicket.setStatus(0);
+        loginTicket.setExpired(new Date(System.currentTimeMillis() + 1000 * 60 * 10));
+
+        loginTicketMapper.insertLoginTicket(loginTicket);
+    }
+
+    @Test
+    public void testSelectLobinTicket(){
+        //先查
+        LoginTicket loginTicket = loginTicketMapper.selectByTicket("abc");
+        System.out.println(loginTicket);
+
+        loginTicketMapper.updateStatus("abc",1);
+
+        //再查一次
+        loginTicket = loginTicketMapper.selectByTicket("abc");
+        System.out.println(loginTicket);
     }
 
 
