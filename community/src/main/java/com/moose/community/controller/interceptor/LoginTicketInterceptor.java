@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.servlet.HandlerInterceptor;
+import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -24,6 +25,7 @@ public class LoginTicketInterceptor implements HandlerInterceptor {
     @Autowired
     private HostHolder hostHolder;
 
+    //通过cookie获取凭证并放入hostholder
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
         //从cookie中获取凭证
@@ -41,9 +43,21 @@ public class LoginTicketInterceptor implements HandlerInterceptor {
             }
         }
 
-
         return true;
+    }
 
+    //hostholder里的用户加入模板以供模板使用
+    @Override
+    public void postHandle(HttpServletRequest request, HttpServletResponse response, Object handler, ModelAndView modelAndView) throws Exception {
+        User user = hostHolder.getUser();
+        if(user!=null && modelAndView!=null){
+            modelAndView.addObject("loginUser",user);
+        }
+    }
 
+    //模板使用结束后释放掉hostholder里的用户
+    @Override
+    public void afterCompletion(HttpServletRequest request, HttpServletResponse response, Object handler, Exception ex) throws Exception {
+        hostHolder.clear();
     }
 }
