@@ -2,9 +2,11 @@ package com.moose.community;
 
 import com.moose.community.dao.DiscussPostMapper;
 import com.moose.community.dao.LoginTicketMapper;
+import com.moose.community.dao.MessageMapper;
 import com.moose.community.dao.UserMapper;
 import com.moose.community.entity.DiscussPost;
 import com.moose.community.entity.LoginTicket;
+import com.moose.community.entity.Message;
 import com.moose.community.entity.User;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -29,6 +31,9 @@ public class Mappertest {
 
     @Autowired
     private LoginTicketMapper loginTicketMapper;
+
+    @Autowired
+    private MessageMapper messageMapper;
 
     @Test
     public void testselect(){
@@ -98,6 +103,31 @@ public class Mappertest {
         //再查一次
         loginTicket = loginTicketMapper.selectByTicket("abc");
         System.out.println(loginTicket);
+    }
+
+
+    @Test
+    public void testSelectLetters(){
+        List<Message> messages = messageMapper.selectConversations(111, 0, 20);
+
+        for (Message m :messages){
+            System.out.println(m);
+        }
+        int i = messageMapper.selectConversationCount(111);
+        System.out.println(i);
+
+        List<Message> messages1 = messageMapper.selectLetters("111_112", 0, 10);
+        for (Message m1 :messages1){
+            System.out.println(m1);
+        }
+
+        int i1 = messageMapper.selectLetterCount("111_112");
+        System.out.println(i1);
+
+        int i2 = messageMapper.selectLetterUnreadCount(131, "111_131");
+        System.out.println(i2);
+
+
     }
 
 
