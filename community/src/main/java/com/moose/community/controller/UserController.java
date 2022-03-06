@@ -1,5 +1,6 @@
 package com.moose.community.controller;
 
+import com.moose.community.annotation.LoginRequired;
 import com.moose.community.entity.User;
 import com.moose.community.service.UserService;
 import com.moose.community.util.CommunityUtil;
@@ -47,11 +48,13 @@ public class UserController {
     private HostHolder hostHolder;
 
 
+    @LoginRequired
     @RequestMapping(path = "/setting", method = RequestMethod.GET)
     public String getSettingPage() {
         return "/site/setting";
     }
 
+    @LoginRequired
     @RequestMapping(path = "/upload", method = RequestMethod.POST)
     public String uploadHeader(MultipartFile headerImage, Model model) {
         if (headerImage == null) {
