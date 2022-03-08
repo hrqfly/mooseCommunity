@@ -84,15 +84,12 @@
 							发布于 <b th:text="${#dates.format(post.createTime,'yyyy-MM-dd HH:mm:ss')}">2019-04-15 15:32:18</b>
 							<ul class="d-inline float-right">
 								<li class="d-inline ml-2">
-									<a href="javascrip:;" th:onclick="|like(this,1,${post.id});|" class="text-primary">
-										<b th:text="${likeStatus==1 ? '已赞':'赞'}">赞</b> (<i th:text="${likeCount}">1</i>)
-									</a></li>
-								<li class="d-inline ml-2">|</li>
-								<li class="d-inline ml-2">
-									<a href="#replyform" class="text-primary">回帖
-										<i th:utext="${post.commentCount}">7</i>
+									<a href="javascript:;" th:onclick="|like(this,1,${post.id},${post.userId},${post.id});|" class="text-primary">
+										<b th:text="${likeStatus==1?'已赞':'赞'}">赞</b> <i th:text="${likeCount}">11</i>
 									</a>
 								</li>
+								<li class="d-inline ml-2">|</li>
+								<li class="d-inline ml-2"><a href="#replyform" class="text-primary">回帖 <i th:text="${post.commentCount}">7</i></a></li>
 							</ul>
 						</div>
 					</div>
@@ -138,8 +135,8 @@
 								<span>发布于 <b th:text="${#dates.format(cvo.comment.createTime,'yyyy-MM-dd HH:mm:ss')}">2019-04-15 15:32:18</b></span>
 								<ul class="d-inline float-right">
 									<li class="d-inline ml-2">
-										<a href="javascript:;" th:onclick="|like(this,2,${cvo.comment.id});|" class="text-primary">
-											<b th:text="${cvo.likeStatus==1 ? '已赞':'赞'}">赞</b> (<i th:text="${cvo.likeCount}">1</i>)
+										<a href="javascript:;" th:onclick="|like(this,2,${cvo.comment.id},${cvo.comment.userId},${post.id});|" class="text-primary">
+											<b th:text="${cvo.likeStatus==1?'已赞':'赞'}">赞</b>(<i th:text="${cvo.likeCount}">1</i>)
 										</a>
 									</li>
 									<li class="d-inline ml-2">|</li>
@@ -164,8 +161,8 @@
 										<span th:text="${#dates.format(rvo.reply.createTime,'yyyy-MM-dd HH:mm:ss')}">2019-04-15 15:32:18</span>
 										<ul class="d-inline float-right">
 											<li class="d-inline ml-2">
-												<a href="javascript:;" th:onclick="|like(this,2,${rvo.reply.id});|" class="text-primary">
-													<b th:text="${rvo.likeStatus==1 ? '已赞':'赞'}">赞</b> (<i th:text="${rvo.likeCount}">1</i>)
+												<a href="javascript:;" th:onclick="|like(this,2,${rvo.reply.id},${rvo.reply.userId},${post.id});|" class="text-primary">
+													<b th:text="${rvo.likeStatus==1?'已赞':'赞'}">赞</b>(<i th:text="${rvo.likeCount}">1</i>)
 												</a>
 											</li>
 											<li class="d-inline ml-2">|</li>
@@ -180,7 +177,7 @@
 													<input type="hidden" name="targetId" th:value="${rvo.user.id}">
 												</div>
 												<div class="text-right mt-2">
-													<button type="button" class="btn btn-primary btn-sm" onclick="#">&nbsp;&nbsp;回&nbsp;&nbsp;复&nbsp;&nbsp;</button>
+													<button type="submit" class="btn btn-primary btn-sm" onclick="#">&nbsp;&nbsp;回&nbsp;&nbsp;复&nbsp;&nbsp;</button>
 												</div>
 											</form>
 										</div>
@@ -189,7 +186,7 @@
 
 								<!-- 回复输入框 -->
 								<li class="pb-3 pt-3">
-									<form method="post" th:action="@{|/comment/add/${post.id}|}" >
+									<form method="post" th:action="@{|/comment/add/${post.id}|}">
 										<div>
 											<input type="text" class="input-size" name="content" placeholder="请输入你的观点"/>
 											<input type="hidden" name="entityType" value="2">
