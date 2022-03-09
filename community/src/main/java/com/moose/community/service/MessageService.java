@@ -1,3 +1,4 @@
+
 package com.moose.community.service;
 
 import com.moose.community.dao.MessageMapper;
@@ -39,16 +40,29 @@ public class MessageService {
     }
 
     public int addMessage(Message message) {
-        //过滤html标签
         message.setContent(HtmlUtils.htmlEscape(message.getContent()));
-        //过滤敏感词
         message.setContent(sensitiveFilter.filter(message.getContent()));
         return messageMapper.insertMessage(message);
     }
 
-    //更新消息的已读状态
     public int readMessage(List<Integer> ids) {
         return messageMapper.updateStatus(ids, 1);
+    }
+
+    public Message findLatestNotice(int userId, String topic) {
+        return messageMapper.selectLatestNotice(userId, topic);
+    }
+
+    public int findNoticeCount(int userId, String topic) {
+        return messageMapper.selectNoticeCount(userId, topic);
+    }
+
+    public int findNoticeUnreadCount(int userId, String topic) {
+        return messageMapper.selectNoticeUnreadCount(userId, topic);
+    }
+
+    public List<Message> findNotices(int userId, String topic, int offset, int limit) {
+        return messageMapper.selectNotices(userId, topic, offset, limit);
     }
 
 }
